@@ -1,0 +1,1 @@
+Full portfolio history tracking integration with Trading212 API.
