@@ -1,3 +1,4 @@
+from pathlib import Path
 from flask import Flask, render_template, jsonify
 import plotly
 import requests
@@ -6,11 +7,9 @@ import plotly.express as px
 import plotly.graph_objs as go
 import json
 from flask_sqlalchemy import SQLAlchemy
-from models import db  # Import the db instance from models package
-from models.Position import Position  # Import your models
+from models import db  
+from models.Position import Position
 from models.Account import Account
-
-
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///portfolio.db'
