@@ -5,8 +5,21 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
 import json
+from flask_sqlalchemy import SQLAlchemy
+from models import db  # Import the db instance from models package
+from models.Position import Position  # Import your models
+from models.Account import Account
+
+
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///portfolio.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+with app.app_context():
+    db.create_all()
 
 @app.route('/api/data')
 def get_data():
@@ -16,7 +29,6 @@ def get_data():
 
 @app.route('/')
 def index():
-
     return render_template('index.html')
 
 if __name__ == '__main__':
