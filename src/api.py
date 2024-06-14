@@ -2,6 +2,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 import requests
 import os
+from models.Position import Position
+from models.Account import Account
 
 class BrokerAPI:
     def __init__(self):
@@ -23,8 +25,19 @@ class BrokerAPI:
 
         data = response.json()
 
-        # todo: pass to model
-        return data
+        for position in data:
+            Position(
+                average_price=position['averagePrice'],
+                current_price=position['currentPrice'],
+                fill_date=position['initialFillDate'],
+                max_buy_price=position['maxBuy'],
+                max_sell_price=position['maxSell'],
+                pie_quant=position['pieQuantity'],
+                quant=position['quantity'],
+                ticker=position['ticker']
+            ).create()
+
+
 
     def get_account(self):
         url = "https://live.trading212.com/api/v0/account"
@@ -34,6 +47,12 @@ class BrokerAPI:
 
         data = response.json()
 
-        # todo: pass to model
-        return data
+        Account(
+            blocked=data['blocked'],
+            free=data['free'],
+            invested=data['invested'],
+            pie_cash=data['pieCash'],
+            result=data['result'],
+            total=data['total']
+        ).create()
 

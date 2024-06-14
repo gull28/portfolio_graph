@@ -25,8 +25,11 @@ class Position(db.Model):
         self.ticker = ticker
     
     def create(self):
-        db.session.add(self)
-        db.session.commit()
+        if not Position.query.filter_by(ticker=self.ticker).first():
+            db.session.add(self)
+            db.session.commit()
+        else:
+            self.update()
     
     def update(self):
         db.session.commit()

@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from models import db
+from datetime import datetime
 
 class Account(db.Model):
     __tablename__ = 'accounts'
@@ -18,14 +19,15 @@ class Account(db.Model):
         self.pie_cash = pie_cash
         self.result = result
         self.total = total
+        self.timestamp = datetime.now()
     
 
     def create(self):
         db.session.add(self)
         db.session.commit()
     
-    def update(self):
-        db.session.commit()
+    # def update(self, id):
+        
     
     def getLatestAccount(self):
         return Account.query.order_by(Account.id.desc()).first()
