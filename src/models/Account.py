@@ -11,6 +11,7 @@ class Account(db.Model):
     pie_cash = db.Column(db.Float, nullable=False)
     result = db.Column(db.Float, nullable=False)
     total = db.Column(db.Float, nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, blocked, free, invested, pie_cash, result, total):
         self.blocked = blocked
