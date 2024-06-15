@@ -26,7 +26,7 @@ class BrokerAPI:
         data = response.json()
 
         for position in data:
-            Position(
+            position_instance = Position(
                 average_price=position['averagePrice'],
                 current_price=position['currentPrice'],
                 fill_date=position['initialFillDate'],
@@ -35,24 +35,26 @@ class BrokerAPI:
                 pie_quant=position['pieQuantity'],
                 quant=position['quantity'],
                 ticker=position['ticker']
-            ).create()
+            )
 
-
+            position_instance.create()
 
     def get_account(self):
-        url = "https://live.trading212.com/api/v0/account"
+        url = "https://live.trading212.com/api/v0/equity/account/cash"
 
         response = requests.get(url, headers=self.headers)
         response.raise_for_status() 
 
         data = response.json()
 
-        Account(
+        print(data)
+        account_instance = Account(
             blocked=data['blocked'],
             free=data['free'],
             invested=data['invested'],
             pie_cash=data['pieCash'],
             result=data['result'],
             total=data['total']
-        ).create()
-
+        )
+        
+        account_instance.create()

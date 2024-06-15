@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-from models import db
 from datetime import datetime
+from db import db, create_app
 
 class Account(db.Model):
     __tablename__ = 'accounts'
@@ -14,7 +14,9 @@ class Account(db.Model):
     timestamp = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, blocked, free, invested, pie_cash, result, total):
-        self.blocked = blocked
+
+        print(blocked, free, invested, pie_cash, result, total)
+        self.blocked = 0.0
         self.free = free
         self.invested = invested
         self.pie_cash = pie_cash
@@ -22,10 +24,11 @@ class Account(db.Model):
         self.total = total
         self.timestamp = datetime.now()
     
-
     def create(self):
-        db.session.add(self)
-        db.session.commit()
+        app = create_app()
+        with app.app_context():
+            db.session.add(self)
+            db.session.commit()
     
     # def update(self, id):
         

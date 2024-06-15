@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from models import db
+from db import db, create_app
 
 class Position(db.Model):
     __tablename__ = 'positions'
@@ -26,13 +26,16 @@ class Position(db.Model):
     
     def create(self):
         if not Position.query.filter_by(ticker=self.ticker).first():
-            db.session.add(self)
-            db.session.commit()
+            with app.app_context():
+                db.session.add(self)
+                db.session.commit()
         else:
             self.update()
     
     def update(self):
-        db.session.commit()
+        app = create_app()
+        with app.app_context():
+            db.session.commit()
 
     @staticmethod
     def getPositions():

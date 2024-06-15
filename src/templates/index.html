@@ -11,11 +11,13 @@
     <h1>Account History Graph</h1>
     <div id="graph"></div>
     
-    <!-- <script type="text/javascript">
-        var graphJSON = {{ graphJSON | tojson }};
-        var graphData = JSON.parse(graphJSON);
+    <script type="text/javascript">
+        var graph = {{ graphJSON | tojson }};
 
-        Plotly.react('graph', graphData.data, graphData.layout, {responsive: true});
-    </script> -->
+        console.log(graph)
+        // var graphData = JSON.parse(graphJSON);
+
+        Plotly.react('graph', graph.data, graph.layout, {responsive: true});
+    </script>
 </body>
 </html>

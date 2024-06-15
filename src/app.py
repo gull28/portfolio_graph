@@ -2,19 +2,14 @@ from pathlib import Path
 from flask import Flask, render_template, jsonify
 import json
 from flask_sqlalchemy import SQLAlchemy
-from models import db
 from models.Account import Account
 from helpers import generateAccountGraph
 from api import BrokerAPI
 from apscheduler.schedulers.background import BackgroundScheduler
-
+from db import create_app, db
 import atexit
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///portfolio.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db.init_app(app)
+app = create_app()
 
 with app.app_context():
     db.create_all()
@@ -31,14 +26,14 @@ def index():
     
     graphJSON = generateAccountGraph(account_history_data)
 
-    return render_template('index.html' , graphJSON=graphJSON)
+    return render_template('index.html', graphJSON=graphJSON)
 
 scheduler = BackgroundScheduler()
 broker_api_instance = BrokerAPI()
 
 
-scheduler.add_job(func=broker_api_instance.get_account, trigger='interval', minutes=5)
-scheduler.add_job(func=broker_api_instance.get_portfolio, trigger='interval', minutes=5)
+scheduler.add_job(func=broker_api_instance.get_account, trigger='interval', minutes=1)
+# scheduler.add_job(func=broker_api_instance.get_portfolio, trigger='interval', minutes=1)
 
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
