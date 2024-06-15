@@ -34,9 +34,11 @@ class Position(db.Model):
     def update(self):
         db.session.commit()
 
-    def getPositions(self):
+    @staticmethod
+    def getPositions():
         return Position.query.all()
     
-    def getPosition(self, ticker):
+    @staticmethod
+    def getPosition(ticker):
         return Position.query.filter_by(ticker=ticker).first()
 

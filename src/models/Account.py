@@ -29,11 +29,13 @@ class Account(db.Model):
     
     # def update(self, id):
         
-    
-    def getLatestAccount(self):
+    # python magic hihihiha
+    @staticmethod
+    def getLatestAccount():
         return Account.query.order_by(Account.id.desc()).first()
 
-    def getHistory(self):
+    @staticmethod
+    def getHistory():
         return Account.query.all()
 
 
