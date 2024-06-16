@@ -14,10 +14,11 @@
     <script type="text/javascript">
         var graph = {{ graphJSON | tojson }};
 
-        console.log(graph)
-        // var graphData = JSON.parse(graphJSON);
+        var graphData = JSON.parse(graph);
 
-        Plotly.react('graph', graph.data, graph.layout, {responsive: true});
+        console.log(graphData)
+
+        Plotly.react('graph', graphData.data, graphData.layout, {responsive: true});
     </script>
 </body>
 </html>

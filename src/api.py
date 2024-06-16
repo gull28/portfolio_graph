@@ -47,7 +47,6 @@ class BrokerAPI:
 
         data = response.json()
 
-        print(data)
         account_instance = Account(
             blocked=data['blocked'],
             free=data['free'],

@@ -8,7 +8,20 @@ import plotly.graph_objs as go
 import plotly.graph_objs as go
 import pandas as pd
 
+def accountToDict(account):
+    return {
+        'id': account.id,
+        'blocked': account.blocked,
+        'free': account.free,
+        'invested': account.invested,
+        'pie_cash': account.pie_cash,
+        'result': account.result,
+        'total': account.total,
+        'timestamp': account.timestamp
+    }
+
 def generateAccountGraph(accountHistoryData):
+    accountHistoryData = [accountToDict(account) for account in accountHistoryData]
     accountHistory = pd.DataFrame(accountHistoryData)
 
     if accountHistory.empty:
@@ -26,17 +39,22 @@ def generateAccountGraph(accountHistoryData):
             template='plotly_white'
         )
         return fig.to_json()
-        
+    print(accountHistory)
+    for account in accountHistory:
+        print("zaza" , account)
     accountHistory['timestamp'] = pd.to_datetime(accountHistory['timestamp'])
-    
+    accountHistory['total'] = accountHistory['total'].astype(float)
+    print(accountHistory['timestamp'])
     accountHistory = accountHistory.sort_values(by='timestamp')
     
     fig = go.Figure()
+
+
     
     fig.add_trace(go.Scatter(
         x=accountHistory['timestamp'],
         y=accountHistory['total'],
-        mode='lines+markers', 
+        mode='lines', 
         name='Total value'
     ))
     
