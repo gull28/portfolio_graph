@@ -6,10 +6,12 @@
     <title>Account History</title>
     <!-- Include Plotly.js -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Account History Graph</h1>
+<body class="bg-black m-10">
     <div id="graph"></div>
+
+    <h1 class="text-white my-6 text-2xl">Positions</h1>
     
     <script type="text/javascript">
         var graph = {{ graphJSON | tojson }};

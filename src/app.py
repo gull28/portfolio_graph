@@ -32,7 +32,7 @@ scheduler = BackgroundScheduler()
 broker_api_instance = BrokerAPI()
 
 
-scheduler.add_job(func=broker_api_instance.get_account, trigger='interval', minutes=5)
+scheduler.add_job(func=broker_api_instance.get_account, trigger='interval', minutes=15)
 # scheduler.add_job(func=broker_api_instance.get_portfolio, trigger='interval', minutes=1)
 
 scheduler.start()
