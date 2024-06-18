@@ -25,6 +25,7 @@ def index():
     account_history_data = Account.getHistory()
     
     graphJSON = generateAccountGraph(account_history_data)
+    positions = Position
 
     return render_template('index.html', graphJSON=graphJSON)
 
@@ -33,7 +34,7 @@ broker_api_instance = BrokerAPI()
 
 
 scheduler.add_job(func=broker_api_instance.get_account, trigger='interval', minutes=15)
-# scheduler.add_job(func=broker_api_instance.get_portfolio, trigger='interval', minutes=1)
+scheduler.add_job(func=broker_api_instance.get_portfolio, trigger='interval', minutes=2)
 
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())

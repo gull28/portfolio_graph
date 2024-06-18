@@ -10,6 +10,7 @@ def create_app():
         app_instance = Flask(__name__)
         app_instance.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///portfolio.db'
         app_instance.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        app_instance.config["SQLALCHEMY_POOL_SIZE"] = 20
         
         db.init_app(app_instance)
 

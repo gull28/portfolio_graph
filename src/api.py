@@ -4,6 +4,8 @@ import requests
 import os
 from models.Position import Position
 from models.Account import Account
+from db import db, create_app
+from sqlalchemy import delete
 
 class BrokerAPI:
     def __init__(self):
@@ -18,12 +20,20 @@ class BrokerAPI:
         self.headers = {"Authorization": self.api_key}
 
     def get_portfolio(self):
+        print("Getting portfolio")
         url = "https://live.trading212.com/api/v0/equity/portfolio"
 
         response = requests.get(url, headers=self.headers)
         response.raise_for_status() 
 
         data = response.json()
+
+        app = create_app()
+
+        # for the sake of simplicity
+        with app.app_context():
+            db.session.query(Position).delete()
+            db.session.commit()
 
         for position in data:
             position_instance = Position(
