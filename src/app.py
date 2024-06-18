@@ -3,6 +3,7 @@ from flask import Flask, render_template, jsonify
 import json
 from flask_sqlalchemy import SQLAlchemy
 from models.Account import Account
+from models.Position import Position
 from helpers import generateAccountGraph
 from api import BrokerAPI
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -25,9 +26,9 @@ def index():
     account_history_data = Account.getHistory()
     
     graphJSON = generateAccountGraph(account_history_data)
-    positions = Position
+    positions = Position.getAll()
 
-    return render_template('index.html', graphJSON=graphJSON)
+    return render_template('index.html', graphJSON=graphJSON, positions=positions)
 
 scheduler = BackgroundScheduler()
 broker_api_instance = BrokerAPI()
