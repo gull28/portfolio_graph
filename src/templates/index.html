@@ -1,24 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Account History</title>
-    <!-- Include Plotly.js -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-black m-10">
-    <div id="graph"></div>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <style>
+    .blue-border {
+      border: 1px solid #3b82f6 !important;
+    }
+
+    .blue-text{
+        color: #3b82f6;
+    }
+</style>
+
+  <body class="bg-black m-10">
+    <div id="graph" class="mb-10"></div>
 
     <h1 class="text-white my-6 text-2xl">Positions</h1>
-    
+    <ul id="positionsList" class="text-white space-y-4"></ul>
+
     <script type="text/javascript">
-        var graph = {{ graphJSON | tojson }};
+      var graph = {{ graphJSON | tojson }};
+      var positions = {{ positions | tojson }};
 
-        var graphData = JSON.parse(graph);
+      console.log(positions);
 
-        Plotly.react('graph', graphData.data, graphData.layout, {responsive: true});
+      function calculatePercentageChange(currentPrice, averagePrice) {
+        if (averagePrice === 0) {
+          throw new Error("Average price cannot be zero");
+        }
+
+        let percentageChange = ((currentPrice - averagePrice) / averagePrice) * 100;
+
+        return percentageChange.toFixed(2);
+      }
+
+      function getColorForChange(change) {
+        if (change > 0) {
+          return "text-green-500";
+        } else if (change < 0) {
+          return "text-red-500";
+        } else {
+          return "text-gray-500";
+        }
+      }
+
+      var graphData = JSON.parse(graph);
+
+      Plotly.react("graph", graphData.data, graphData.layout, { responsive: true });
+
+      var positionsList = document.getElementById("positionsList");
+      positions.forEach(function (position) {
+        var listItem = document.createElement("li");
+        listItem.className = "bg-black p-4 rounded-lg blue-border shadow-md";
+
+        var tickerDiv = document.createElement("div");
+        tickerDiv.className = "text-xl font-bold mb-2";
+
+        var ticker = document.createElement("span");
+        ticker.className = "blue-text";
+        ticker.textContent = position.ticker;
+
+        tickerDiv.appendChild(ticker);
+        listItem.appendChild(tickerDiv);
+
+        var detailsTable = document.createElement("table");
+        detailsTable.className = "w-fit text-left";
+
+        var change = calculatePercentageChange(position.current_price, position.average_price);
+        var changeColorClass = getColorForChange(change);
+
+        var formattedQuantity = parseFloat(position.quant).toFixed(2);
+        var formattedTotal = parseFloat(position.total).toFixed(2);
+        var formattedAveragePrice = parseFloat(position.average_price).toFixed(2);
+        var formattedCurrentPrice = parseFloat(position.current_price).toFixed(2);
+
+        var tableContent = `
+          <tr>
+            <td class="font-semibold pr-4 mr-10">Quantity:</td>
+            <td>${formattedQuantity}</td>
+          </tr>
+          <tr>
+            <td class="font-semibold pr-4 mr-10">Total:</td>
+            <td>${formattedTotal}</td>
+          </tr>
+          <tr>
+            <td class="font-semibold pr-4 mr-10">Average Price:</td>
+            <td>${formattedAveragePrice}</td>
+          </tr>
+          <tr>
+            <td class="font-semibold pr-4 mr-10">Current Price:</td>
+            <td>${formattedCurrentPrice}</td>
+          </tr>
+          <tr>
+            <td class="font-semibold pr-4 mr-10">Change:</td>
+            <td class="${changeColorClass}">${change}%</td>
+          </tr>
+        `;
+
+        detailsTable.innerHTML = tableContent;
+
+        listItem.appendChild(detailsTable);
+        positionsList.appendChild(listItem);
+      });
     </script>
-</body>
+  </body>
 </html>

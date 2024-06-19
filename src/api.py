@@ -20,11 +20,13 @@ class BrokerAPI:
         self.headers = {"Authorization": self.api_key}
 
     def get_portfolio(self):
-        print("Getting portfolio")
         url = "https://live.trading212.com/api/v0/equity/portfolio"
 
         response = requests.get(url, headers=self.headers)
-        response.raise_for_status() 
+        
+        if(response.status_code == 429):
+            print("Rate limit reached")
+            return
 
         data = response.json()
 

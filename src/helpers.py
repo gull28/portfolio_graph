@@ -119,3 +119,17 @@ def generateAccountGraph(accountHistoryData):
     plotToJson = fig.to_json()
     
     return plotToJson
+
+def positionsToDict(positions):
+    return [{
+        'id': position.id,
+        'average_price': position.average_price,
+        'current_price': position.current_price,
+        'fill_date': position.fill_date,
+        'max_buy_price': position.max_buy_price,
+        'max_sell_price': position.max_sell_price,
+        'pie_quant': position.pie_quant,
+        'quant': position.quant,
+        'ticker': position.ticker,
+        'total': position.total
+    } for position in positions]

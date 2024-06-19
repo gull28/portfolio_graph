@@ -1,10 +1,8 @@
-from pathlib import Path
 from flask import Flask, render_template, jsonify
-import json
 from flask_sqlalchemy import SQLAlchemy
 from models.Account import Account
 from models.Position import Position
-from helpers import generateAccountGraph
+from helpers import generateAccountGraph, positionsToDict
 from api import BrokerAPI
 from apscheduler.schedulers.background import BackgroundScheduler
 from db import create_app, db
@@ -27,8 +25,10 @@ def index():
     
     graphJSON = generateAccountGraph(account_history_data)
     positions = Position.getAll()
+    positionsJson = positionsToDict(positions)
 
-    return render_template('index.html', graphJSON=graphJSON, positions=positions)
+
+    return render_template('index.html', graphJSON=graphJSON, positions=positionsJson)
 
 scheduler = BackgroundScheduler()
 broker_api_instance = BrokerAPI()
