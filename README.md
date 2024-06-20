@@ -12,6 +12,7 @@ https://t212public-api-docs.redoc.ly/
 ### To start the server:
 
 - Firstly clone the repository;
+- Activate python venv using `source venv/bin/activate`
 - Run `pip install -r requirements.txt`
 - create .env file in the base directory (not src) and add `BROKER_API_KEY` environment variable with your own Trading212 api key
 - `cd src`
